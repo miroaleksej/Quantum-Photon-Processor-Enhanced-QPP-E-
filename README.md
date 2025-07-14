@@ -136,9 +136,9 @@ qpp.integrate_topological_neural_network(output_dim=3)
 
 ## 🤝 Как внести вклад
 1. Форкните репозиторий
-2. Создайте ветку (`git checkout -b feature/amazing-feature`)
-3. Сделайте коммит изменений (`git commit -m 'Add amazing feature'`)
-4. Запушьте в форк (`git push origin feature/amazing-feature`)
+2. Создайте ветку (`git checkout -b feature/miroaleksej`)
+3. Сделайте коммит изменений (`git commit -m 'Add miroaleksej'`)
+4. Запушьте в форк (`git push origin feature/miroaleksej`)
 5. Откройте Pull Request
 
 ## 📜 Лицензия
