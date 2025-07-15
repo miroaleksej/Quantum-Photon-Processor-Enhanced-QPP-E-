@@ -156,7 +156,7 @@ def integrate_neural_network(hypercube):
 
 ## Commercialization Pathway
 For commercial licensing:
-contact: innovations@quantumhypercube.tech  
+contact: miro-aleksej@yandex.ru  
 subject: QIL v1.0 Commercial Inquiry
 
 Required information:
