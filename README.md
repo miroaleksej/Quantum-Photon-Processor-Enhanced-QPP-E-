@@ -100,6 +100,8 @@ qpp.integrate_topological_neural_network(output_dim=3)
 ```
 
 ## 🧠 Архитектурные компоненты
+<img width="1024" height="1024" alt="image" src="https://github.com/user-attachments/assets/8eec4d12-dec5-4284-8979-dc31d43e0827" />
+
 1. **PhysicsHypercubeSystemEnhanced**
    - Гауссовские процессы с квантовой оптимизацией
    - Топологический анализ через UMAP+DBSCAN
