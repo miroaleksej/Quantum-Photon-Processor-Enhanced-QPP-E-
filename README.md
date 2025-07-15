@@ -194,3 +194,36 @@ qpp.integrate_topological_neural_network(output_dim=3)
 **QPP-E** — не просто процессор, это квантовый скачок в будущее вычислений! Исследуйте пределы возможного с нашей платформой.
 
 #QuantumComputing #QuantumEmulator #PhotonicQuantum #QuantumProcessor #QuantumSimulator #QuantumAlgorithms #QuantumTech #QuantumProgramming #PythonQuantum #QuantumPhysics #PhotonProcessor #QuantumPhotonic #QuantumOptics #QuantumHolography #QuantumTopology #GroverAlgorithm #DeutschJozsa #QuantumNeuralNetworks #QuantumEducation #QuantumResearch #PythonProgramming #SciPy #Qiskit #PyTorch #QuantumPython #OpenSourceQuantum #GitHubTech #STEMEducation #ComputationalPhysics #QuantumLib
+
+<!-- Visitor Counter with Owner Exclusion -->
+<div align="right" id="visitor-counter">
+  <img src="https://api.visitorbadge.io/api/combined?username=YOUR_GITHUB_USERNAME&repo=YOUR_REPO_NAME&countColor=%237B1E7A&label=SCIENCE%20SEEKERS" alt="Visitor Count">
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Проверяем, является ли пользователь владельцем
+  const isOwner = /github\.com\/YOUR_GITHUB_USERNAME($|\/)/i.test(window.location.href);
+  
+  if (isOwner) {
+    // Создаем кастомный элемент для владельца
+    const counterDiv = document.getElementById('visitor-counter');
+    counterDiv.innerHTML = `
+      <div style="display: inline-block; background: #2e2e2e; padding: 5px 10px; border-radius: 4px;">
+        <span style="color: #8a6d8b; font-weight: bold;">⚡️ INNOVATOR VIEW ⚡️</span>
+      </div>
+    `;
+    
+    // Отправляем запрос на сервер для исключения
+    fetch('https://visitorbadge.io/exclude', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        user: 'YOUR_GITHUB_USERNAME',
+        repo: 'YOUR_REPO_NAME',
+        exclude: true
+      })
+    });
+  }
+});
+</script>
