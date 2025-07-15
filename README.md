@@ -196,3 +196,5 @@ qpp.integrate_topological_neural_network(output_dim=3)
 #QuantumComputing #QuantumEmulator #PhotonicQuantum #QuantumProcessor #QuantumSimulator #QuantumAlgorithms #QuantumTech #QuantumProgramming #PythonQuantum #QuantumPhysics #PhotonProcessor #QuantumPhotonic #QuantumOptics #QuantumHolography #QuantumTopology #GroverAlgorithm #DeutschJozsa #QuantumNeuralNetworks #QuantumEducation #QuantumResearch #PythonProgramming #SciPy #Qiskit #PyTorch #QuantumPython #OpenSourceQuantum #GitHubTech #STEMEducation #ComputationalPhysics #QuantumLib
 
 ![Visitor Count](https://visitor-badge.laobi.icu/badge?page_id=yourusername.yourrepo)
+
+[![Unique Visitors](https://img.shields.io/badge/dynamic/json?color=blue&label=Unique%20Visitors&query=%24.totals.users&url=https%3A%2F%2Fapi.github.com%2Frepos%2Fyourusername%2Fyourrepo%2Ftraffic%2Fpopular)](https://github.com/yourusername/yourrepo)
