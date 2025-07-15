@@ -1,6 +1,7 @@
 # Quantum Photon Processor Enhanced (QPP-E) Исключительно научный инструмент! 🚀
 
-![QPP-E Architecture](https://via.placeholder.com/800x400.png?text=QPP-E+Architecture+Diagram)
+![QPP-E Architecture]
+![image](https://github.com/user-attachments/assets/3526a7a0-242f-4795-8909-f564452b4088)
 *Революционная платформа для квантово-фотонных вычислений с топологической оптимизацией*
 
 ## 🔍 Обзор
