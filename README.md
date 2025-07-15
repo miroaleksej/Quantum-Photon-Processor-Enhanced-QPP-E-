@@ -1,6 +1,24 @@
 # 🌌 Quantum Photon Processor (QPP) - Advanced Photonic Quantum Emulator
 _Self-learning quantum simulator with holographic compression and topological optimization_ 
 
+<h3 align="center">Supported by</h3>
+<p align="center">
+  <a href="https://quantumfund.org">
+    <img src="https://img.shields.io/badge/Quantum_Innovation_Grant-2023-blue" height="30">
+  </a>
+  <a href="https://opencollective.com/qpp">
+    <img src="https://img.shields.io/badge/Open_Collective-Support_Us-green" height="30">
+  </a>
+</p>
+
+---
+
+<p align="center">
+  <img src="https://visitor-badge.laobi.icu/badge?page_id=yourusername.qpp" alt="visitors">
+  <img src="https://img.shields.io/github/last-commit/yourusername/qpp?color=blue" alt="last commit">
+  <img src="https://img.shields.io/github/stars/yourusername/qpp?style=social" alt="stars">
+</p>
+
 Исключительно научный инструмент! С нашей революционной системой сжатия до 250 кубит на потребительском железе! 🚀
 
 <img width="1024" height="1024" alt="image" src="https://github.com/user-attachments/assets/a2e7d460-5447-4808-92c4-b8c44ba523b2" />
