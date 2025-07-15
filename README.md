@@ -100,7 +100,7 @@ qpp.integrate_topological_neural_network(output_dim=3)
 ```
 
 ## 🧠 Архитектурные компоненты
-<img width="1024" height="1024" alt="image" src="https://github.com/user-attachments/assets/8eec4d12-dec5-4284-8979-dc31d43e0827" />
+<img width="1024" height="1024" alt="image" src="https://github.com/user-attachments/assets/ad5a81c7-bb34-4383-ac80-a7ab9a4ea169" />
 
 1. **PhysicsHypercubeSystemEnhanced**
    - Гауссовские процессы с квантовой оптимизацией
