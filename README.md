@@ -22,7 +22,7 @@ graph TD
 ```
 
 ## ✨ Ключевые особенности
-<img width="1024" height="1024" alt="image" src="https://github.com/user-attachments/assets/f5b46ea0-328d-4f4f-a714-f6919f6fcb9b" />
+<img width="1024" height="1024" alt="image" src="https://github.com/user-attachments/assets/2a25f0e7-3221-4754-92ce-9b840881d8cb" />
 
 - **Квантовая память с запутанностью**
   - Хранение состояний с эмоциональными метками
