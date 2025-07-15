@@ -152,4 +152,7 @@ qpp.integrate_topological_neural_network(output_dim=3)
 
 ---
 
+ Статистика посещаемости
+![Visitors](https://api.visitorbadge.io/api/visitors?path=https://github.com/yourrepo&label=Visitors&countColor=%23263759)
+
 **QPP-E** — не просто процессор, это квантовый скачок в будущее вычислений! Исследуйте пределы возможного с нашей платформой.
