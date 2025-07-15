@@ -19,8 +19,24 @@ _Self-learning quantum simulator with holographic compression and topological op
   <img src="https://img.shields.io/github/stars/yourusername/qpp?style=social" alt="stars">
 </p>
 
-Исключительно научный инструмент! С нашей революционной системой сжатия до 250 кубит на потребительском железе! 🚀
+<div align="center">
+  <img src="https://raw.githubusercontent.com/yourusername/repo/main/docs/compression_graph.png" width="80%">
+  
+  <p><strong>Рис. 1: Сравнение производительности</strong><br>
+  Плотность кубитов при различных подходах к моделированию</p>
+</div>
 
+## 🔥 Научный прорыв в квантовой эмуляции
+```python
+# Демонстрация сжатия 250 кубитов
+from qpp import HyperCompressionEngine
+compressor = HyperCompressionEngine()
+compressed_state = compressor.fit_transform(
+    large_quantum_system, 
+    target_qubits=250,
+    compression_mode="topo-holographic"
+)
+print(f"Сжатие: {compressor.compression_ratio}x")
 <img width="1024" height="1024" alt="image" src="https://github.com/user-attachments/assets/a2e7d460-5447-4808-92c4-b8c44ba523b2" />
 
 *Революционная платформа для квантово-фотонных вычислений с топологической оптимизацией*
