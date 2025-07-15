@@ -163,7 +163,14 @@ qpp.integrate_topological_neural_network(output_dim=3)
 
 ---
 
- Статистика посещаемости
-![Visitors](https://api.visitorbadge.io/api/visitors?path=https://github.com/yourrepo&label=Visitors&countColor=%23263759)
+ ![Python Version](https://img.shields.io/badge/python-3.8%2B-blue)
+![Dependencies](https://img.shields.io/badge/dependencies-Qiskit%20%7C%20PyTorch%20%7C%20UMAP-orange)
+![License](https://img.shields.io/badge/license-MIT-green)
+
+🔧 **Hardware Accelerated**:  
+![CUDA Support](https://img.shields.io/badge/CUDA-supported-brightgreen) 
+![GPU Memory](https://img.shields.io/badge/VRAM-4GB%2B-yellow)
 
 **QPP-E** — не просто процессор, это квантовый скачок в будущее вычислений! Исследуйте пределы возможного с нашей платформой.
+
+#QuantumComputing #QuantumEmulator #PhotonicQuantum #QuantumProcessor #QuantumSimulator #QuantumAlgorithms #QuantumTech #QuantumProgramming #PythonQuantum #QuantumPhysics #PhotonProcessor #QuantumPhotonic #QuantumOptics #QuantumHolography #QuantumTopology #GroverAlgorithm #DeutschJozsa #QuantumNeuralNetworks #QuantumEducation #QuantumResearch #PythonProgramming #SciPy #Qiskit #PyTorch #QuantumPython #OpenSourceQuantum #GitHubTech #STEMEducation #ComputationalPhysics #QuantumLib
