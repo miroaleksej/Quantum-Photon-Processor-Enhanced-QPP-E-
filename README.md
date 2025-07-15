@@ -123,7 +123,9 @@ qpp.integrate_topological_neural_network(output_dim=3)
    - Pollard's Rho с квантовым ускорением
 
 ## 📊 Производительность
-![Производительность QPP-E](https://via.placeholder.com/600x300.png?text=Performance+Benchmarks)
+![Производительность QPP-E]
+<img width="1024" height="1024" alt="image" src="https://github.com/user-attachments/assets/40c265a6-46e9-4916-8439-4a6e5140550a" />
+
 *Сравнение с IBM Quantum и NVIDIA DGX A100 на задачах криптоанализа*
 
 | Система             | Время ECDSA анализа | Точность | Энергопотребление |
