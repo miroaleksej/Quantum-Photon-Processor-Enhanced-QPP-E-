@@ -13,11 +13,7 @@ _Self-learning quantum simulator with holographic compression and topological op
 
 ---
 
-<p align="center">
-  <img src="https://visitor-badge.laobi.icu/badge?page_id=miroaleksej.qpp" alt="visitors">
-  <img src="https://img.shields.io/github/last-commit/(https://github.com/miroaleksej/Quantum-Photon-Processor-Enhanced-QPP-E-/blob/main/README.md)/qpp?color=blue" alt="last commit">
-  <img src="https://img.shields.io/github/stars/[miroaleksej](https://github.com/miroaleksej/Quantum-Photon-Processor-Enhanced-QPP-E-/blob/main/README.md)/qpp?style=social" alt="stars">
-</p>
+
 ---
 
 ## 🔥 Научный прорыв в квантовой эмуляции
