@@ -15,8 +15,8 @@ _Self-learning quantum simulator with holographic compression and topological op
 
 <p align="center">
   <img src="https://visitor-badge.laobi.icu/badge?page_id=yourusername.qpp" alt="visitors">
-  <img src="https://img.shields.io/github/last-commit/yourusername/qpp?color=blue" alt="last commit">
-  <img src="https://img.shields.io/github/stars/yourusername/qpp?style=social" alt="stars">
+  <img src="https://img.shields.io/github/last-commit/miroaleksej/qpp?color=blue" alt="last commit">
+  <img src="https://img.shields.io/github/stars/miroaleksej/qpp?style=social" alt="stars">
 </p>
 ---
 
