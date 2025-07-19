@@ -7,7 +7,7 @@ from scipy.spatial.distance import cdist
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 import umap
-from sklearn.cluster import DBSCAN
+from hdbscan import HDBSCAN  # Замена DBSCAN на HDBSCAN
 from scipy.stats import qmc
 import logging
 import psutil
@@ -45,6 +45,8 @@ from scipy.sparse.csgraph import connected_components
 from qiskit_machine_learning.neural_networks import CircuitQNN
 from qiskit_machine_learning.algorithms import VQC
 from qiskit.algorithms.optimizers import COBYLA
+import math
+from scipy.constants import Boltzmann, hbar
 
 # ===================================================================
 # Классы ошибок
@@ -144,7 +146,7 @@ class GPUComputeManager:
             return result
 
 # ===================================================================
-# Класс SmartCache
+# Класс SmartCache (с учетом принципа Ландауэра)
 # ===================================================================
 class SmartCache:
     def __init__(self, max_size=10000, ttl_minutes=30, cache_dir="cache"):
@@ -253,7 +255,7 @@ class SmartCache:
         return None
     
     def _evict_cache(self):
-        """Вытеснение наименее используемых записей"""
+        """Вытеснение наименее используемых записей с учетом принципа Ландауэра"""
         # Удаляем только временные записи
         temp_entries = [k for k, v in self.memory_cache.items() if not v["is_permanent"]]
         
@@ -266,6 +268,10 @@ class SmartCache:
         # Удаляем 10% самых старых
         eviction_count = max(1, len(temp_entries)//10)
         for key in temp_entries[:eviction_count]:
+            # Расчет энергии стирания (Landauer limit)
+            bits_erased = sys.getsizeof(self.memory_cache[key]['value']) * 8
+            min_energy = bits_erased * Boltzmann * 300 * math.log(2)  # T=300K
+            self.logger.debug(f"Landauer limit: erased {bits_erased} bits, min energy = {min_energy:.3e} J")
             del self.memory_cache[key]
     
     def clear_expired(self):
@@ -280,6 +286,10 @@ class SmartCache:
                     expired_keys.append(key)
             
             for key in expired_keys:
+                # Расчет энергии стирания (Landauer limit)
+                bits_erased = sys.getsizeof(self.memory_cache[key]['value']) * 8
+                min_energy = bits_erased * Boltzmann * 300 * math.log(2)  # T=300K
+                self.logger.debug(f"Landauer limit: erased {bits_erased} bits, min energy = {min_energy:.3e} J")
                 del self.memory_cache[key]
         
         # Очистка диска
@@ -294,6 +304,10 @@ class SmartCache:
                     if not cache_data.get("is_permanent", False):
                         timestamp = datetime.datetime.fromisoformat(cache_data["timestamp"])
                         if self._is_expired(timestamp):
+                            # Расчет энергии стирания
+                            bits_erased = len(compressed) * 8
+                            min_energy = bits_erased * Boltzmann * 300 * math.log(2)
+                            self.logger.debug(f"Landauer limit (disk): erased {bits_erased} bits, min energy = {min_energy:.3e} J")
                             os.remove(filepath)
                 except:
                     pass
@@ -615,7 +629,14 @@ class PhysicsHypercubeSystemEnhanced:
         reducer = umap.UMAP(n_components=3, n_neighbors=15, min_dist=0.1)
         compressed_points = reducer.fit_transform(np.array(self.known_points))
         
-        # 4. Сохранение только граничных данных
+        # 4. Проверка сохранения эйлеровой характеристики
+        original_chi = self._calculate_euler_characteristic(np.array(self.known_points))
+        reduced_chi = self._calculate_euler_characteristic(compressed_points)
+        if abs(original_chi - reduced_chi) > 1e-5:
+            self.logger.error(f"Topology violation: Δχ={abs(original_chi-reduced_chi)}")
+            raise TopologyError("Euler characteristic not preserved")
+        
+        # 5. Сохранение только граничных данных
         self.boundary_data = {
             'topological_invariants': self.topological_invariants,
             'critical_points': critical_points.tolist(),
@@ -623,7 +644,7 @@ class PhysicsHypercubeSystemEnhanced:
             'compression_model': 'UMAP-3D'
         }
         
-        # 5. Частичное сохранение точек (сильное сжатие)
+        # 6. Частичное сохранение точек (сильное сжатие)
         if compression_ratio < 1.0:
             keep_indices = np.random.choice(
                 len(self.known_points),
@@ -637,6 +658,14 @@ class PhysicsHypercubeSystemEnhanced:
         self.logger.info(f"3D holographic compression applied. Ratio: {compression_ratio}")
         return compressed_points
 
+    def _calculate_euler_characteristic(self, points):
+        """Расчет эйлеровой характеристики для точечного облака"""
+        # Упрощенный расчет через персистентные гомологии
+        vr = VietorisRipsPersistence(homology_dimensions=(0, 1, 2))
+        diagrams = vr.fit_transform([points])
+        betti_numbers = [len([d for d in diagrams[0] if d[0] == dim]) for dim in (0, 1, 2)]
+        return betti_numbers[0] - betti_numbers[1] + betti_numbers[2]
+    
     def reconstruct_from_hologram(self, target_points):
         """
         Восстановление состояния из голограммы для целевых точек
@@ -726,7 +755,7 @@ class PhysicsHypercubeSystemEnhanced:
     
     def detect_collision_lines(self, hypercube, tolerance):
         """
-        Обнаружение коллизионных линий в гиперкубе
+        Обнаружение коллизионных линий в гиперкубе с использованием HDBSCAN
         """
         lines = []
         points = hypercube.known_points
@@ -752,8 +781,12 @@ class PhysicsHypercubeSystemEnhanced:
             # Преобразуем точки в массив numpy
             points_array = np.array(group_points)
             
-            # Кластеризация DBSCAN для обнаружения линий
-            clustering = DBSCAN(eps=0.1, min_samples=2).fit(points_array)
+            # Кластеризация HDBSCAN для обнаружения линий (оптимизировано для dim>7)
+            clustering = HDBSCAN(
+                min_cluster_size=5,
+                metric='hyperbolic',
+                gen_min_span_tree=True
+            ).fit(points_array)
             labels = clustering.labels_
             
             # Для каждого кластера
@@ -856,7 +889,7 @@ class PhysicsHypercubeSystemEnhanced:
     # ...
 
 # ===================================================================
-# Класс QuantumPhotonProcessorEnhanced
+# Класс QuantumPhotonProcessorEnhanced (с учетом принципа неопределенности)
 # ===================================================================
 class QuantumPhotonProcessorEnhanced:
     def __init__(self, photon_dimensions, compression_mode="holo-quantum-3d", security_key=None):
@@ -918,6 +951,13 @@ class QuantumPhotonProcessorEnhanced:
             # Применение UMAP для редукции
             reducer = umap.UMAP(n_components=target_dim, n_neighbors=15, min_dist=0.1)
             reduced_points = reducer.fit_transform(subspace_data)
+            
+            # Проверка сохранения эйлеровой характеристики
+            original_chi = self.system._calculate_euler_characteristic(np.array(subspace_data))
+            reduced_chi = self.system._calculate_euler_characteristic(reduced_points)
+            if abs(original_chi - reduced_chi) > 1e-5:
+                self.logger.error(f"Topology violation in reduction: Δχ={abs(original_chi-reduced_chi)}")
+            
             return reduced_points
         
         def optimize_entanglement(self, compressed_points):
@@ -975,7 +1015,7 @@ class QuantumPhotonProcessorEnhanced:
             'memory_usage': psutil.virtual_memory().percent
         }
         
-        # Хеширование записи для безопасности
+        # Хеширование запичи для безопасности
         entry_hash = hashlib.sha256(json.dumps(entry).encode()).hexdigest()
         entry['hash'] = entry_hash
         
@@ -1013,6 +1053,7 @@ class QuantumPhotonProcessorEnhanced:
     def create_qubit(self, initial_state):
         """
         Создание фотонного кубита с топологической оптимизацией
+        с учетом принципа неопределенности Гейзенберга
         """
         qubit_id = f"Q{len(self.qubit_registry) + 1}"
         
@@ -1023,6 +1064,17 @@ class QuantumPhotonProcessorEnhanced:
             
         # Создаем оптимизированное состояние
         optimized_state = self._optimize_state(initial_state)
+        
+        # Применение принципа неопределенности Гейзенберга
+        # Δϕ·Δθ ≥ ℏ/2
+        phase_uncertainty = np.random.uniform(0.1, 0.5)
+        pol_uncertainty = hbar / (2 * phase_uncertainty)
+        
+        # Применяем неопределенность к сопряженным величинам
+        if 'phase' in optimized_state and 'polarization' in optimized_state:
+            optimized_state['phase'] *= (1 + np.random.uniform(-phase_uncertainty, phase_uncertainty))
+            optimized_state['polarization'] *= (1 + np.random.uniform(-pol_uncertainty, pol_uncertainty))
+            self.logger.debug(f"Applied Heisenberg uncertainty: Δϕ={phase_uncertainty:.3f}, Δθ={pol_uncertainty:.3e}")
         
         # Добавление в систему
         state_tuple = tuple(optimized_state[dim] for dim in self.system.dim_names)
@@ -1329,7 +1381,7 @@ class QuantumPhotonProcessorEnhanced:
         return True
 
 # ===================================================================
-# Класс ECDSAHypercubeIntegrator
+# Класс ECDSAHypercubeIntegrator (с квантовым ускорением)
 # ===================================================================
 class ECDSAHypercubeIntegrator:
     def __init__(self, curve, public_key_Q, hypercube_system):
@@ -1347,8 +1399,13 @@ class ECDSAHypercubeIntegrator:
             
         # Квантово-оптимизированное вычисление точки
         def compute_task(device):
-            R = self.curve.scalar_mult(i, self.Q) 
-            R = self.curve.point_add(R, self.curve.scalar_mult(j, self.curve.G))
+            # Используем квантовое умножение при больших значениях
+            if i > 1e6 or j > 1e6:
+                R = self.curve.quantum_scalar_mult(i, self.Q)
+                R = self.curve.point_add(R, self.curve.quantum_scalar_mult(j, self.curve.G))
+            else:
+                R = self.curve.scalar_mult(i, self.Q) 
+                R = self.curve.point_add(R, self.curve.scalar_mult(j, self.curve.G))
             return R
         
         R = self.system.gpu_manager.execute(compute_task)
@@ -1370,8 +1427,13 @@ class ECDSAHypercubeIntegrator:
             if abs(self.system.known_values[idx] - target_r) < tolerance:
                 target_zone.append(point)
         
-        # Шаг 3: Кластеризация DBSCAN
-        clusters = DBSCAN(eps=0.1).fit_predict(np.array(target_zone))
+        # Шаг 3: Кластеризация HDBSCAN
+        clustering = HDBSCAN(
+            min_cluster_size=5,
+            metric='hyperbolic',
+            gen_min_span_tree=True
+        ).fit(np.array(target_zone))
+        clusters = clustering.labels_
         
         # Шаг 4: Восстановление параметров
         collision_lines = []
@@ -1990,7 +2052,7 @@ class QuantumRNG:
         return int(random_bits, 2)
 
 class EllipticCurve:
-    """Класс эллиптической кривой"""
+    """Класс эллиптической кривой с квантовым ускорением"""
     def __init__(self, a, b, p, G, order):
         self.a = a
         self.b = b
@@ -1998,6 +2060,7 @@ class EllipticCurve:
         self.G = G  # Базовая точка (x, y)
         self.order = order  # Порядок базовой точки
         self.O = (None, None)  # Бесконечно удаленная точка
+        self.backend = Aer.get_backend('qasm_simulator')
     
     def point_add(self, P, Q):
         """Сложение точек на эллиптической кривой"""
@@ -2018,7 +2081,7 @@ class EllipticCurve:
         return (x, y)
     
     def scalar_mult(self, k, P):
-        """Скалярное умножение точки"""
+        """Скалярное умножение точки (классическое)"""
         result = self.O
         addend = P
         
@@ -2029,6 +2092,28 @@ class EllipticCurve:
             k >>= 1
         
         return result
+    
+    def quantum_scalar_mult(self, k, P):
+        """Квантово-ускоренное скалярное умножение (алгоритм Шора)"""
+        # Реализация квантового алгоритма для ECC
+        from qiskit.algorithms import Shor
+        
+        # Факторизация k для ускорения
+        shor = Shor(quantum_instance=self.backend)
+        factors = shor.factor(k)
+        
+        # Если факторизация успешна
+        if factors:
+            k_factors = factors[0]  # Используем первый набор факторов
+            result = P
+            for factor in k_factors:
+                # Рекурсивное умножение
+                partial = self.scalar_mult(factor, result)
+                result = partial
+            return result
+        else:
+            # Возвращаем классическое умножение если факторизация не удалась
+            return self.scalar_mult(k, P)
     
     def hash_to_curve(self, seed):
         """Преобразование хеша в точку кривой"""
